@@ -823,12 +823,19 @@ function copyVerseToClipboard() {
 
 function showImageOptions() {
   try {
-    document.getElementById("imageOptions").classList.remove("hidden");
-    // Select first theme by default
-    const firstTheme = document.querySelector(".theme-option");
-    if (firstTheme) {
-      document.querySelectorAll(".theme-option").forEach(opt => opt.classList.remove("active"));
-      firstTheme.classList.add("active");
+    const imageOptions = document.getElementById("imageOptions");
+    const shareOptions = document.querySelector(".share-options");
+    
+    if (imageOptions && shareOptions) {
+      shareOptions.classList.add("hidden");
+      imageOptions.classList.remove("hidden");
+      
+      // Select first theme by default
+      const firstTheme = document.querySelector(".theme-option");
+      if (firstTheme) {
+        document.querySelectorAll(".theme-option").forEach(opt => opt.classList.remove("active"));
+        firstTheme.classList.add("active");
+      }
     }
   } catch (e) {
     console.error("Error showing image options:", e);
@@ -934,16 +941,37 @@ function wrapText(context, text, maxWidth) {
 
   for (let i = 1; i < words.length; i++) {
     const word = words[i];
-    const width = context.measureText(currentLine + " " + word).width;
-    if (width < maxWidth) {
-      currentLine += " " + word;
-    } else {
+    const testLine = currentLine + " " + word;
+    const metrics = context.measureText(testLine);
+    const testWidth = metrics.width;
+    
+    if (testWidth > maxWidth) {
       lines.push(currentLine);
       currentLine = word;
+    } else {
+      currentLine = testLine;
     }
   }
   lines.push(currentLine);
   return lines;
+}
+
+function previewImage() {
+  try {
+    const selectedTheme = document.querySelector(".theme-option.active")?.dataset.theme;
+    if (!selectedTheme) return;
+    
+    generateVerseImage(selectedTheme);
+    document.getElementById("imagePreview").classList.remove("hidden");
+    
+    // Scroll to preview
+    document.getElementById("imagePreview").scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'nearest' 
+    });
+  } catch (e) {
+    console.error("Error previewing image:", e);
+  }
 }
 
 function previewImage() {
