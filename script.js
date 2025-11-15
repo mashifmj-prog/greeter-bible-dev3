@@ -935,25 +935,120 @@ if (includeAttribution) {
 }
 
 function wrapText(context, text, maxWidth) {
-  const words = text.split(" ");
+  const words = text.split(' ');
   const lines = [];
-  let currentLine = words[0];
+  let currentLine = '';
 
-  for (let i = 1; i < words.length; i++) {
-    const word = words[i];
-    const testLine = currentLine + " " + word;
+  for (let i = 0; i < words.length; i++) {
+    const testLine = currentLine + words[i] + ' ';
     const metrics = context.measureText(testLine);
     const testWidth = metrics.width;
-    
-    if (testWidth > maxWidth) {
+
+    if (testWidth > maxWidth && i > 0) {
       lines.push(currentLine);
-      currentLine = word;
+      currentLine = words[i] + ' ';
     } else {
       currentLine = testLine;
     }
   }
-  lines.push(currentLine);
+  lines.push(currentLine.trim());
   return lines;
+}
+
+function generateVerseImage(theme) {
+  try {
+    const canvas = document.getElementById("verseCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Set background based on theme
+    let gradient;
+    switch(theme) {
+      case "minimal":
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#e0e0e0";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+        break;
+      case "dark":
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#2c3e50");
+        gradient.addColorStop(1, "#34495e");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        break;
+      case "sunrise":
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#ff9a9e");
+        gradient.addColorStop(1, "#fecfef");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        break;
+      case "ocean":
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#4facfe");
+        gradient.addColorStop(1, "#00f2fe");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        break;
+      case "sunset":
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#fa709a");
+        gradient.addColorStop(1, "#fee140");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        break;
+      case "night":
+        gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#2c3e50");
+        gradient.addColorStop(1, "#4ca1af");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        break;
+    }
+    
+    // Set text color based on theme
+    const textColor = theme === "minimal" || theme === "sunrise" ? "#333333" : "#ffffff";
+    ctx.fillStyle = textColor;
+    ctx.textAlign = "center";
+    
+    // Add verse text with better word wrapping
+    const maxWidth = canvas.width - 100; // More padding
+    const lineHeight = 30; // Slightly more spacing
+    const verseLines = wrapText(ctx, currentVerse, maxWidth);
+    
+    // Calculate starting position to center text vertically
+    const totalTextHeight = verseLines.length * lineHeight;
+    let y = (canvas.height - totalTextHeight) / 2 + lineHeight / 2;
+    
+    // Set font
+    ctx.font = "bold 22px 'Inter', sans-serif";
+    
+    verseLines.forEach(line => {
+      ctx.fillText(line.trim(), canvas.width / 2, y);
+      y += lineHeight;
+    });
+    
+    // Add watermark
+    ctx.font = "14px 'Inter', sans-serif";
+    ctx.fillStyle = textColor + "80"; // 50% opacity
+    ctx.fillText("Shared via Greeter Bible App", canvas.width / 2, canvas.height - 40);
+    
+    // Add attribution link if enabled
+    const includeAttribution = document.getElementById("includeAttribution").checked;
+    if (includeAttribution) {
+      ctx.font = "12px 'Inter', sans-serif";
+      ctx.fillText("mashifmj-prog.github.io/greeter-bible-dev2", canvas.width / 2, canvas.height - 20);
+    }
+    
+    return canvas.toDataURL("image/png");
+  } catch (e) {
+    console.error("Error generating verse image:", e);
+    return null;
+  }
 }
 
 function previewImage() {
