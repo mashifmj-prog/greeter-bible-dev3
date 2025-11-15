@@ -807,7 +807,7 @@ function closeShareModal() {
 function copyVerseToClipboard() {
   try {
     const verseText = currentVerse;
-    const textToCopy = `${verseText}\n\nShared via Greeter Bible App • https://mashifmj-prog.github.io/greeter-bible-dev2/`;
+    const textToCopy = `${verseText}\n\nShared via Greeter Bible App • https://mashifmj-prog.github.io/greeter-bible-dev3/`;
     
     navigator.clipboard.writeText(textToCopy).then(() => {
       showSuccessMessage("Verse copied to clipboard! 📋");
@@ -920,12 +920,12 @@ function generateVerseImage(theme) {
     ctx.fillStyle = textColor + "80"; // 50% opacity
     ctx.fillText("Shared via GreetaApp", canvas.width / 2, canvas.height - 30);
     
-    // Add attribution link if enabled
-    const includeAttribution = document.getElementById("includeAttribution").checked;
-    if (includeAttribution) {
-      ctx.font = "12px 'Inter', sans-serif";
-      ctx.fillText("greetaapp.com", canvas.width / 2, canvas.height - 15);
-    }
+// Add attribution link if enabled
+const includeAttribution = document.getElementById("includeAttribution").checked;
+if (includeAttribution) {
+  ctx.font = "12px 'Inter', sans-serif";
+  ctx.fillText("mashifmj-prog.github.io/greeter-bible-dev3", canvas.width / 2, canvas.height - 15);
+}
     
     return canvas.toDataURL("image/png");
   } catch (e) {
