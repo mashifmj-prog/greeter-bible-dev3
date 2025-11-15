@@ -984,13 +984,15 @@ function wrapText(context, text, maxWidth) {
   const words = text.split(' ');
   const lines = [];
   let currentLine = '';
-
+  
+  // Set font for accurate measurement
+  context.font = "bold 22px 'Inter', sans-serif";
+  
   for (let i = 0; i < words.length; i++) {
     const testLine = currentLine + words[i] + ' ';
     const metrics = context.measureText(testLine);
-    const testWidth = metrics.width;
-
-    if (testWidth > maxWidth && i > 0) {
+    
+    if (metrics.width > maxWidth && currentLine !== '') {
       lines.push(currentLine);
       currentLine = words[i] + ' ';
     } else {
