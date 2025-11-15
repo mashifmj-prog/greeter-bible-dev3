@@ -829,3 +829,16 @@ body.night .app-background {
     transform: translateX(0);
   }
 }
+/* Always show button text, even on mobile */
+.btn-text {
+  display: inline-block !important;
+}
+
+.controls-container {
+  gap: 8px;
+}
+
+.control-btn {
+  padding: 10px 15px !important;
+  font-size: 0.9rem;
+}
