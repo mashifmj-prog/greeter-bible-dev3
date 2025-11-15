@@ -842,3 +842,58 @@ body.night .app-background {
   padding: 10px 15px !important;
   font-size: 0.9rem;
 }
+
+/* Fix theme grid display */
+.theme-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 15px !important;
+  margin: 20px 0 !important;
+}
+
+.theme-option {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  padding: 15px !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+  border: 2px solid transparent !important;
+  text-align: center !important;
+}
+
+.theme-option:hover {
+  background: #f5f5f5 !important;
+  transform: translateY(-2px) !important;
+}
+
+.theme-option.active {
+  background: #e3f2fd !important;
+  border-color: #2196f3 !important;
+}
+
+.theme-preview {
+  width: 80px !important;
+  height: 60px !important;
+  border-radius: 8px !important;
+  border: 2px solid #e0e0e0 !important;
+}
+
+.theme-option.active .theme-preview {
+  border-color: #2196f3 !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .theme-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  
+  .theme-preview {
+    width: 60px !important;
+    height: 45px !important;
+  }
+}
