@@ -1269,6 +1269,9 @@ function initializeEventListeners() {
     // Share option buttons
     document.getElementById('shareImageBtn')?.addEventListener('click', showImageOptions);
     document.getElementById('copyTextBtn')?.addEventListener('click', copyVerseToClipboard);
+    
+    // NEW: Share app link button
+    document.getElementById('shareTextBtn')?.addEventListener('click', shareAppLink);
 
     // Theme selection
     const themeOptions = document.querySelectorAll(".theme-option");
@@ -1325,3 +1328,49 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error("Error during initialization:", e);
   }
 });
+
+// Share app link for publicity
+function shareAppLink() {
+  try {
+    const appUrl = "https://mashifmj-prog.github.io/greeter-bible-dev2/";
+    const shareText = `Check out this beautiful Bible app with daily verses, prayer journal, and more! ${appUrl}`;
+    
+    // Try native sharing first
+    if (navigator.share) {
+      navigator.share({
+        title: 'Greeter Bible App',
+        text: 'Beautiful Bible app with daily verses and prayer journal',
+        url: appUrl
+      }).then(() => {
+        showSuccessMessage("App shared successfully! 🚀");
+        closeShareModal();
+      }).catch(err => {
+        // Fallback to clipboard
+        fallbackShareAppLink(shareText);
+      });
+    } else {
+      // Fallback to clipboard
+      fallbackShareAppLink(shareText);
+    }
+  } catch (e) {
+    console.error("Error sharing app link:", e);
+    fallbackShareAppLink(shareText);
+  }
+}
+
+function fallbackShareAppLink(shareText) {
+  navigator.clipboard.writeText(shareText).then(() => {
+    showSuccessMessage("App link copied to clipboard! 📋\nPaste it anywhere to share!");
+    closeShareModal();
+  }).catch(err => {
+    // Ultimate fallback
+    const textArea = document.createElement('textarea');
+    textArea.value = shareText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    showSuccessMessage("App link copied to clipboard! 📋\nPaste it anywhere to share!");
+    closeShareModal();
+  });
+}
