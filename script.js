@@ -948,15 +948,19 @@ function generateVerseImage(theme) {
     ctx.fillStyle = textColor;
     ctx.textAlign = "center";
     
-    // Add verse text with word wrapping
-    const maxWidth = canvas.width - 80;
-    const lineHeight = 28;
+    // Add verse text with better word wrapping
+    const maxWidth = canvas.width - 100; // More padding
+    const lineHeight = 30; // Slightly more spacing
     const verseLines = wrapText(ctx, currentVerse, maxWidth);
     
-    let y = canvas.height / 2 - (verseLines.length * lineHeight) / 2;
-    
-    verseLines.forEach(line => {
-      ctx.font = "20px 'Inter', sans-serif";
+    // Calculate starting position to center text vertically
+    const totalTextHeight = verseLines.length * lineHeight;
+    let y = (canvas.height - totalTextHeight) / 2 + 20; // Start a bit lower
+
+    // Set font
+    ctx.font = "bold 22px 'Inter', sans-serif";
+
+    verseLines.forEach((line, index) => {
       ctx.fillText(line, canvas.width / 2, y);
       y += lineHeight;
     });
@@ -964,14 +968,14 @@ function generateVerseImage(theme) {
     // Add watermark
     ctx.font = "14px 'Inter', sans-serif";
     ctx.fillStyle = textColor + "80"; // 50% opacity
-    ctx.fillText("Shared via GreetaApp", canvas.width / 2, canvas.height - 30);
+    ctx.fillText("Shared via Greeter Bible App", canvas.width / 2, canvas.height - 40);
     
-// Add attribution link if enabled
-const includeAttribution = document.getElementById("includeAttribution").checked;
-if (includeAttribution) {
-  ctx.font = "12px 'Inter', sans-serif";
-  ctx.fillText("mashifmj-prog.github.io/greeter-bible-dev3", canvas.width / 2, canvas.height - 15);
-}
+    // Add attribution link if enabled
+    const includeAttribution = document.getElementById("includeAttribution").checked;
+    if (includeAttribution) {
+      ctx.font = "12px 'Inter', sans-serif";
+      ctx.fillText("mashifmj-prog.github.io/greeter-bible-dev2", canvas.width / 2, canvas.height - 20);
+    }
     
     return canvas.toDataURL("image/png");
   } catch (e) {
