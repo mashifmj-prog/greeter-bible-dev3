@@ -807,7 +807,7 @@ function closeShareModal() {
 function copyVerseToClipboard() {
   try {
     const verseText = currentVerse;
-    const textToCopy = `${verseText}\n\nShared via GreetaApp • https://greetaapp.com`;
+    const textToCopy = `${verseText}\n\nShared via Greeter Bible App • https://mashifmj-prog.github.io/greeter-bible-dev2/`;
     
     navigator.clipboard.writeText(textToCopy).then(() => {
       showSuccessMessage("Verse copied to clipboard! 📋");
